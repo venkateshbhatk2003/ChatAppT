@@ -138,7 +138,7 @@ app.get('/messages', authenticateToken, async (req, res) => {
     await poolConnect; // Ensure pool is connected
     
     const result = await pool.request()
-      .query('SELECT * FROM Messages ORDER BY timestamp ASC');
+    .query('SELECT sender, message, timestamp FROM Messages ORDER BY timestamp ASC');
     
     res.json(result.recordset);
   } catch (err) {
@@ -181,9 +181,9 @@ io.on('connection', (socket) => {
       
       // Save message - Using parameterized query
       await pool.request()
-        .input('sender', sql.VarChar, sender)
-        .input('message', sql.VarChar, message)
-        .query('INSERT INTO Messages (sender, message, timestamp) VALUES (@sender, @message, GETDATE())');
+    .input('sender', sql.NVarChar, sender)
+    .input('message', sql.NVarChar, message)
+    .query('INSERT INTO Messages (sender, message, timestamp) VALUES (@sender, @message, GETDATE())');
 
       // Broadcast message to all clients
       io.emit('receiveMessage', { 

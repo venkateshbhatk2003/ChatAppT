@@ -1,0 +1,123 @@
+/* Login Container */
+
+
+.login-container {
+  width: 350px;
+  padding: var(--space-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--background-primary);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  margin: var(--space-xxl) auto; /* Center the form */
+  /* Removed hover transformation effect */
+}
+
+/* Logo */
+.logo img {
+  width: 100px;
+  margin-bottom: var(--space-lg);
+  border-radius: var(--border-radius-md);
+}
+
+/* Form Header */
+.login-form h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  color: var(--text-dark);
+}
+
+/* Form Group - matching the styles.css pattern */
+.login-form .form-group {
+  margin-bottom: var(--space-md);
+  position: relative;
+  text-align: left;
+}
+
+/* Form Labels */
+.login-form label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  color: var(--text-dark);
+}
+
+/* Form Inputs */
+.login-form input {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  background-color: var(--background-primary);
+  color: var(--text-dark);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+/* Submit Button - exactly matching styles.css button colors */
+.login-form button {
+  width: 100%;
+  padding: var(--space-md);
+  background-color: var(--primary-color); /* #3498db from styles.css */
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: var(--space-md);
+}
+
+.login-form button:hover {
+  background-color: var(--primary-dark); /* #2980b9 from styles.css */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Login Footer */
+.login-footer {
+  width: 350px;
+  margin: var(--space-lg) auto; /* Center the footer */
+  text-align: center;
+}
+
+/* Horizontal Line */
+.login-footer hr {
+  border: 0;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: var(--space-md) 0;
+}
+
+/* Signup Link */
+.login-footer .signup-link {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-md);
+}
+
+.login-footer .signup-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.login-footer .signup-link a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Affiliate Text */
+.login-footer .affiliate-text {
+  font-size: var(--font-size-xs);
+  color: var(--text-medium);
+  margin-top: var(--space-sm);
+}

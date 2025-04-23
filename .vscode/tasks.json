@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile ChatServer",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp",
+                ".;lib/mssql-jdbc-12.10.0.jre11.jar",
+                "ChatServer.java"
+            ]
+        },
+        {
+            "label": "Run ChatServer",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                ".;lib/mssql-jdbc-12.10.0.jre11.jar",
+                "ChatServer"
+            ]
+        }
+    ]
+}
