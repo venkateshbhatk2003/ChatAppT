@@ -1,24 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  const loginForm = document.getElementById('loginForm');
+  const errorContainer = document.createElement('div');
+  errorContainer.className = 'error-messages';
+  errorContainer.style.color = 'red';
+  errorContainer.style.margin = '10px 0';
+  loginForm.parentNode.insertBefore(errorContainer, loginForm.nextSibling);
+
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    errorContainer.innerHTML = ''; // Clear previous errors
     
-    // Get form values
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
-    
+
     // Basic validation
-    if (username.length < 3) {
-      alert('Username must be at least 3 characters');
+    if (!username || username.length < 3) {
+      errorContainer.innerHTML = '<div>• Username must be at least 3 characters</div>';
       return;
     }
     
-    if (password.length < 8) {
-      alert('Password must be at least 8 characters');
+    if (!password || password.length < 8) {
+      errorContainer.innerHTML = '<div>• Password must be at least 8 characters</div>';
       return;
     }
 
     try {
-      // Send credentials to Java backend (port 8080)
+      // Show loading state
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging in...';
+
+      // Send login request
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: {
@@ -27,26 +40,23 @@ document.addEventListener('DOMContentLoaded', function() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
       });
 
-      const data = await response.text(); // Java returns plain text
-      
-      if (response.ok) {
-        // 1. Store username for session
-        sessionStorage.setItem('username', username);
-        
-        // 2. Connect to Node.js chat server (port 5000)
-        const socket = io('http://localhost:5000');
-        
-        // 3. Emit 'join' event to Node.js
-        socket.emit('join', { username });
-        
-        // 4. Redirect to chat page
-        window.location.href = 'chat.html';
-      } else {
-        alert(data || 'Login failed');
+      // Reset button state
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+
+      const data = await response.json(); // Parse JSON response
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
       }
+
+      // Success - store username and redirect
+      sessionStorage.setItem('username', data.username);
+      window.location.href = 'landing.html'; // Redirect to chat page
+      
     } catch (error) {
       console.error('Login error:', error);
-      alert('Connection error. Try again.');
+      errorContainer.innerHTML = `<div>• ${error.message || 'Connection error. Please try again.'}</div>`;
     }
   });
 });

@@ -1,21 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  const signupForm = document.getElementById('signupForm');
+  const errorContainer = document.createElement('div');
+  errorContainer.className = 'error-messages';
+  errorContainer.style.color = 'red';
+  errorContainer.style.margin = '10px 0';
+  signupForm.parentNode.insertBefore(errorContainer, signupForm.nextSibling);
+
+  signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    errorContainer.innerHTML = ''; // Clear previous errors
     
     // Get form values
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Input validation (same as before)
+    // Input validation
     const errors = [];
     
-    if (username.length < 3) {
+    if (!username) {
+      errors.push('Username is required');
+    } else if (username.length < 3) {
       errors.push('Username must be at least 3 characters');
     }
     
-    if (password.length < 8) {
+    if (!password) {
+      errors.push('Password is required');
+    } else if (password.length < 8) {
       errors.push('Password must be at least 8 characters');
+    } else if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one uppercase letter');
+    } else if (!/\d/.test(password)) {
+      errors.push('Password must contain at least one number');
     }
     
     if (password !== confirmPassword) {
@@ -23,12 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (errors.length > 0) {
-      alert(errors.join('\n'));
+      errorContainer.innerHTML = errors.map(err => `<div>• ${err}</div>`).join('');
       return;
     }
 
     try {
-      // Send signup request to Java backend (port 8080)
+      // Show loading state
+      const submitBtn = signupForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing up...';
+
+      // Send signup request
       const response = await fetch('http://localhost:8080/signup', {
         method: 'POST',
         headers: {
@@ -37,17 +59,22 @@ document.addEventListener('DOMContentLoaded', function() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
       });
 
-      const data = await response.text();
-      
-      if (response.ok) {
-        alert('Signup successful! Please login.');
-        window.location.href = 'login.html';
-      } else {
-        alert(data || 'Signup failed');
+      // Reset button state
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Signup failed with unknown error');
       }
+
+      // Success handling
+      alert('Signup successful! Please login.');
+      window.location.href = 'login.html';
+      
     } catch (error) {
       console.error('Signup error:', error);
-      alert('Connection error. Try again.');
+      errorContainer.innerHTML = `<div>• ${error.message || 'Connection error. Please try again.'}</div>`;
     }
   });
 });

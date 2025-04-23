@@ -7,7 +7,22 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height
+  : 100vh;
+}
+
+/* Add this to fix layout issues */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Update chat container height */
+.chat-container {
+  height: 100vh; /* Changed from 90vh */
+  max-height: 100vh;
+  border-radius: 0; /* Remove rounded corners for full viewport */
 }
 
 /* Auth Container */
@@ -90,6 +105,27 @@ body {
 }
 
 /* Error message */
+/* Remove duplicate chat interface from landing page */
+#chat-app {
+  display: none; /* Hide the duplicate chat */
+}
+
+/* For chat.html only */
+.chat-page .chat-container {
+  height: 100vh;
+}
+
+.no-messages {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+}
+
+.error-message {
+  color: #d8000c;
+  text-align: center;
+  padding: 20px;
+}
 .error-message {
   color: #d8000c;
   background-color: #ffbaba;

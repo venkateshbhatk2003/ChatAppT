@@ -1,9 +1,40 @@
+// At the VERY TOP of script.js, add:
+document.addEventListener('DOMContentLoaded', function() {
+  const username = sessionStorage.getItem('username');
+  if (!username) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  // Display username in UI
+  const userElements = document.querySelectorAll('#current-user, #username');
+  userElements.forEach(el => el.textContent = username);
+});
+
+// Then modify your fetch to:
+fetch('http://localhost:5000/messages')
+  .then(response => {
+    if (!response.ok) throw new Error('Network response was not ok');
+    return response.json();
+  })
+  .then(messages => {
+    const loadingMsg = document.querySelector('.loading-message');
+    if (loadingMsg) loadingMsg.remove();
+    
+    messages.forEach(msg => {
+      addMessage(msg.message, msg.sender, msg.sender === sessionStorage.getItem('username'));
+    });
+  })
+  .catch(error => {
+    console.error('Fetch error:', error);
+    alert('Please wait while we reconnect...');
+    setTimeout(() => window.location.reload(), 2000);
+  });
 // Check if user is logged in
-const token = sessionStorage.getItem('token');
 const username = sessionStorage.getItem('username');
 
 // Redirect to login if not authenticated
-if (!token || !username) {
+if (!username) {
   window.location.href = 'login.html';
 }
 
@@ -11,17 +42,15 @@ if (!token || !username) {
 let socket;
 try {
   socket = io('http://localhost:5000', {
-    extraHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
+    auth: {
+      username: username // Send username instead of token
+    }
   });
   
   socket.on('connect_error', (error) => {
     console.error('Socket connection error:', error);
     alert('Connection to chat server failed. Please try logging in again.');
-    // Redirect to login page if connection fails
     sessionStorage.removeItem('username');
-    sessionStorage.removeItem('token');
     window.location.href = 'login.html';
   });
 } catch (error) {
@@ -44,9 +73,7 @@ function sendMessage() {
 }
 
 // Display existing messages
-fetch('http://localhost:5000/messages', {
-  headers: { Authorization: `Bearer ${token}` },
-})
+fetch('http://localhost:5000/messages')
   .then((response) => {
     if (!response.ok) {
       throw new Error('Failed to fetch messages');
@@ -57,7 +84,6 @@ fetch('http://localhost:5000/messages', {
     messages.forEach((msg) => {
       addMessage(msg.message, msg.sender, msg.sender === username);
     });
-    // Auto scroll to the bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
   })
   .catch((error) => {
@@ -84,7 +110,6 @@ socket.on('receiveMessage', (data) => {
 // Logout
 logoutButton.addEventListener('click', () => {
   sessionStorage.removeItem('username');
-  sessionStorage.removeItem('token');
   window.location.href = 'login.html';
 });
 

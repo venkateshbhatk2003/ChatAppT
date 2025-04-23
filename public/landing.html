@@ -4,15 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Shared styles -->
-  <link rel="stylesheet" href="landing_styles.css"> <!-- Landing page-specific styles -->
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/landing_styles.css">
 </head>
 <body>
-  <!-- Header -->
   <header>
     <nav>
       <div class="logo">
-        <img src="assets/logo.jpg" alt="Company Logo" /> 
+        <img src="./assets/logo.jpg" alt="Company Logo"> 
       </div>
       <ul class="nav-links">
         <li><a href="landing.html">Home</a></li>
@@ -22,47 +21,20 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <h1>Welcome, <span id="username"></span>!</h1>
-    <p>QuickChat is a modern, user-friendly messaging application designed to make communication seamless and enjoyable.</p>
+    <p>QuickChat is a modern, user-friendly messaging application.</p>
     <div class="buttons">
-      <button class="btn primary">Get Started</button>
+      <a href="chat.html" class="btn primary">Start Chatting</a>
       <button class="btn btn-secondary">View Demo</button>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <hr>
-    <p class="affiliate-text">© 1996–2025, Chat.com, Inc. or its affiliates</p>
+    <p class="affiliate-text">© 1996–2025, Chat.com, Inc.</p>
   </footer>
 
-  <!-- Chat Application -->
-  <section id="chat-app" style="padding: 20px;">
-    <div class="chat-container">
-      <div class="chat-header">
-        <h2>Chat App</h2>
-        <div class="user-info">
-          <span id="current-user"></span>
-          <button id="logout-button">Logout</button>
-        </div>
-      </div>
-      <div class="chat-messages" id="chat-messages">
-        <!-- Messages will appear here -->
-      </div>
-      <div class="chat-input">
-        <input type="text" id="message-input" placeholder="Type a message..." maxlength="500">
-        <button id="send-button">Send</button>
-      </div>
-    </div>
-  </section>
-  <link rel="stylesheet" href="css/chat_styles.css">
-  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
-  <script src="js/chat_script.js"></script>
-
-
   <script src="./js/landing.js"></script>
-  <script src="./js/chat_script.js"></script>
 </body>
 </html>

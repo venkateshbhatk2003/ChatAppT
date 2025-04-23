@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <script>
-    document.getElementById('current-user').textContent = sessionStorage.getItem('username');
-  </script>
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/chat_styles.css">
 </head>
 <body>
   <div class="chat-container">
@@ -19,7 +17,6 @@
       </div>
     </div>
     <div class="chat-messages" id="chat-messages">
-      <!-- Messages will appear here -->
       <div class="loading-message">Loading messages...</div>
     </div>
     <div class="chat-input">
@@ -28,8 +25,10 @@
     </div>
   </div>
   
-  <!-- Load socket.io client from CDN -->
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
   <script src="js/script.js"></script>
+  <script>
+    document.getElementById('current-user').textContent = sessionStorage.getItem('username');
+  </script>
 </body>
 </html>
